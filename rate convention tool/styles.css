@@ -800,18 +800,23 @@ input[type="number"]:focus {
 }
 
 
-/* --- Purity Export Card (White/Gold Reference Theme) --- */
+/* --- Purity Export Card (Lavender/Mint Theme) --- */
 .purity-export-card {
     /* Dimensions & Layout */
     width: 1080px;
     height: auto;
-    /* Dynamic Height */
     min-height: 1080px;
-    /* Minimum HD Square */
-    background-color: #ffffff;
+
+    /* Background: Pastel Lavender with Soft Gradient */
+    background: radial-gradient(circle at 10% 20%, #f4f0ff 0%, #fbfaff 90%);
+    position: relative;
+    overflow: hidden;
+
     color: #333333;
     font-family: 'Outfit', sans-serif;
-    padding: 50px;
+
+    /* Framing padding for floating card */
+    padding: 60px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -823,21 +828,61 @@ input[type="number"]:focus {
     z-index: -9999;
 }
 
+/* Cloud Shapes via Pseudo-elements (Gradient based for Export Compatibility) */
+.purity-export-card::before,
+.purity-export-card::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.purity-export-card::before {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(168, 139, 235, 0.2) 0%, rgba(168, 139, 235, 0) 70%);
+    /* Soft Lavender Fade */
+    top: -100px;
+    right: -100px;
+}
+
+.purity-export-card::after {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(136, 216, 176, 0.2) 0%, rgba(136, 216, 176, 0) 70%);
+    /* Soft Mint Fade */
+    bottom: -100px;
+    left: -100px;
+}
+
+/* Inner Floating Card */
+.exp-card-inner {
+    position: relative;
+    z-index: 1;
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(168, 139, 235, 0.15);
+    /* Soft Lavender Shadow */
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 /* Header */
 .exp-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 4px solid #eec846;
-    /* Reference Gold Line */
-    padding-bottom: 15px;
-    /* Compact */
-    margin-bottom: 20px;
-    /* Compact */
+    border-bottom: 3px solid #f0ebfa;
+    /* Light Lavender Border */
+    padding-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .exp-brand h1 {
-    color: #333333;
+    color: #A88BEB;
+    /* Primary Lavender */
     font-size: 3rem;
     margin: 0;
     text-transform: uppercase;
@@ -846,47 +891,43 @@ input[type="number"]:focus {
 }
 
 .exp-brand p {
-    color: #888;
+    color: #999;
     font-size: 1.4rem;
     margin: 5px 0 0;
     font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .exp-meta {
     text-align: right;
-    color: #555;
+    color: #888;
     font-size: 1.4rem;
     font-weight: 500;
 }
 
-/* Image Section - Reference Style */
+/* Image Section */
 .exp-image-box {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 450px;
-    /* Increased size */
     height: 450px;
     aspect-ratio: 1 / 1;
-    /* Force Square */
     flex-shrink: 0;
-    /* Prevent shrinking */
     overflow: hidden;
-    border-radius: 12px;
-    background: #f8f9fa;
-    /* Light grey bg like reference */
-    border: 1px solid #eee;
+    border-radius: 20px;
+    /* Softer radius */
+    background: #faf9fc;
+    border: 2px solid #f0ebfa;
     margin-left: auto;
     margin-right: auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .exp-image-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* No Distortion */
 }
 
 /* Table Section */
@@ -898,23 +939,25 @@ input[type="number"]:focus {
 
 .exp-row {
     display: flex;
-    padding: 12px 0;
-    border-bottom: 1px dashed #ddd;
-    /* Softer divider */
-    font-size: 1.5rem;
+    padding: 15px 0;
+    border-bottom: 1px dashed #e6e1f0;
+    font-size: 1.6rem;
     align-items: center;
     font-weight: 500;
+    color: #555;
 }
 
 .exp-header-row {
     font-weight: 700;
-    color: #333;
-    /* Dark Text */
-    border-bottom: 2px solid #ccc;
-    background: #f9f9f9;
-    /* Subtle header bg */
-    border-radius: 8px 8px 0 0;
-    padding: 15px 0;
+    color: #A88BEB;
+    /* Lavender */
+    border-bottom: 2px solid #e6e1f0;
+    background: #faf8ff;
+    /* Very light lavender bg */
+    border-radius: 12px;
+    padding: 15px 20px;
+    /* Added inner padding */
+    margin-bottom: 10px;
     text-transform: uppercase;
     font-size: 1.4rem;
     letter-spacing: 1px;
@@ -924,61 +967,60 @@ input[type="number"]:focus {
 .col-purity {
     width: 25%;
     text-align: left;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .col-weight {
     width: 45%;
     text-align: center;
-    color: #555;
 }
 
 .col-profit {
     width: 30%;
     text-align: right;
-    padding-right: 20px;
+    padding-right: 15px;
     font-weight: 700;
 }
 
-/* Note Section - Yellow Reference Style */
+/* Note Section */
 .exp-note {
     margin-top: auto;
-    /* Push to bottom of flex container */
-    padding-top: 15px;
-    /* Minimal gap */
+    padding-top: 30px;
 }
 
 .note-box {
-    background: #fffbe6;
-    /* Light Yellow */
-    border-left: 8px solid #eec846;
-    /* Darker Gold/Yellow Bar */
-    padding: 20px 25px;
-    font-size: 1.4rem;
-    color: #5d5336;
-    /* Dark Gold/Brown Text */
-    font-weight: 600;
-    border-radius: 6px;
+    background: #fbfaff;
+    /* Off-white/Lavender tint */
+    border: 1px solid #f0ebfa;
+    border-left: 8px solid #A88BEB;
+    /* Lavender Bar */
+    padding: 25px;
+    font-size: 1.5rem;
+    color: #555;
+    font-weight: 500;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    box-shadow: none;
-    border-top: none;
-    border-right: none;
-    border-bottom: none;
+    box-shadow: 0 5px 20px rgba(168, 139, 235, 0.05);
 }
 
 .note-label {
-    color: #3d3316;
+    color: #A88BEB;
+    /* Lavender */
     font-weight: 800;
     margin-right: 15px;
-    text-transform: capitalize;
-    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-size: 1.4rem;
 }
 
 /* Footer */
 .exp-footer {
-    display: none;
-    /* Reference didn't emphasize footer, hiding to save space or simple copyright */
+    text-align: center;
+    color: #bbb;
+    font-size: 1rem;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .hidden {
@@ -1068,17 +1110,17 @@ textarea:focus {
     background: rgba(0, 0, 0, 0.5);
 }
 
-/* Hidden Export Container */
+/* Hidden Export Container - White Theme */
 .share-container {
     position: fixed;
     top: 0;
     left: -9999px;
     width: 600px;
-    background: #050b0e;
+    background: #ffffff;
     padding: 30px;
     font-family: 'Outfit', sans-serif;
-    color: #fff;
-    border: 1px solid #333;
+    color: #333;
+    border: 1px solid #e0e0e0;
 }
 
 .share-header {
@@ -1086,14 +1128,15 @@ textarea:focus {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--accent-gold);
+    border-bottom: 2px solid #D4AF37;
     padding-bottom: 10px;
 }
 
 .share-header h3 {
-    color: var(--accent-gold);
+    color: #333;
     font-size: 1.5rem;
     text-transform: uppercase;
+    font-weight: 700;
 }
 
 .share-content {
@@ -1106,10 +1149,10 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background: #111;
+    background: #f8f9fa;
     padding: 20px;
     border-radius: 12px;
-    border: 1px solid #222;
+    border: 1px solid #e9ecef;
 }
 
 .share-row {
@@ -1117,20 +1160,36 @@ textarea:focus {
     justify-content: space-between;
     font-size: 1rem;
     padding-bottom: 5px;
-    border-bottom: 1px dashed #333;
+    border-bottom: 1px dashed #ced4da;
+    color: #495057;
+}
+
+.share-row span:first-child {
+    font-weight: 500;
+    color: #6c757d;
+}
+
+.share-row span:last-child {
+    font-weight: 600;
+    color: #212529;
 }
 
 .share-row.highlight {
-    background: rgba(76, 217, 100, 0.1);
+    background: rgba(40, 167, 69, 0.1);
     padding: 5px;
     border-radius: 4px;
     border: none;
-    color: var(--success-color);
+    color: #28a745;
+}
+
+.share-row.highlight span:last-child {
+    color: #28a745;
     font-weight: 700;
 }
 
 .gold-text {
-    color: var(--accent-gold);
+    color: #D4AF37 !important;
+    /* Force Gold */
     font-weight: 700;
 }
 
@@ -1139,21 +1198,25 @@ textarea:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #000;
+    background: #fff;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
 }
 
 .share-image-box img {
     max-width: 100%;
-    border-radius: 8px;
-    border: 1px solid #333;
+    border-radius: 4px;
+    border: none;
 }
 
 .share-notes {
     margin-top: 20px;
     padding: 15px;
-    background: #111;
+    background: #fff3cd;
+    /* Light yellow for note */
     border-radius: 8px;
-    border-left: 3px solid var(--accent-gold);
+    border-left: 4px solid #ffc107;
     font-size: 0.9rem;
-    color: #ccc;
+    color: #856404;
 }

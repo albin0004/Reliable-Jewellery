@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="purity-data-point">
                      <span class="purity-point-label">Pure Wt</span>
-                     <span class="purity-point-value">${pureWeight.toFixed(3)}</span>
+                     <span class="purity-point-value">${parseFloat(pureWeight.toFixed(3))}</span>
                 </div>
                 <div class="purity-data-point end">
                      <span class="purity-point-label">Profit %</span>
@@ -357,9 +357,9 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Setup Receipt
             const now = new Date();
-            // Format: "Oct 24, 2023 | 10:30 AM"
-            document.getElementById('receipt-date').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            document.getElementById('receipt-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            // Format: "Oct 24, 2023 | 10:30 AM" (UAE Time)
+            document.getElementById('receipt-date').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'Asia/Dubai' });
+            document.getElementById('receipt-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dubai' });
 
             // Image
             const recImg = document.getElementById('receipt-image-container');
@@ -390,16 +390,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const pw = card.querySelectorAll('.purity-point-value')[1].innerText.trim();
                     const prof = card.querySelectorAll('.purity-point-value')[2].innerText.trim();
 
-                    // Determine Color (Green/Red)
-                    // The inline style in card has the color, let's parse or re-evaluate
+                    // Determine Color (Mint Green / Red)
                     const rawProfitText = prof.replace('%', '');
                     const isPositive = parseFloat(rawProfitText) >= 0;
-                    const profColor = isPositive ? '#4cd964' : '#ff3b30'; // IOS Green : IOS Red
+                    const profColor = isPositive ? '#88D8B0' : '#ff3b30'; // Mint Green : Red
 
                     row.innerHTML = `
-                        <div class="col-purity">${p}</div>
-                        <div class="col-weight">${pw}</div>
-                        <div class="col-profit" style="color: ${profColor}">${prof}</div>
+                        <div class="col-purity" style="color: #000000; font-weight: 500;">${p}</div>
+                        <div class="col-weight" style="color: #000000; font-weight: 500;">${pw}</div>
+                        <div class="col-profit" style="color: #000000; font-weight: 500;">${prof}</div>
                     `;
                     recBody.appendChild(row);
                 });
@@ -454,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
 
             // Populate
-            document.getElementById('share-time').innerText = now.toLocaleString();
+            document.getElementById('share-time').innerText = now.toLocaleString('en-US', { timeZone: 'Asia/Dubai' });
             document.getElementById('ex-weight').innerText = c2ItemWeight.value || '-';
             document.getElementById('ex-purity').innerText = c2Purity.value || '-';
             document.getElementById('ex-sale-amt').innerText = c2ResSaleAmount.innerText;
@@ -495,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const canvas = await html2canvas(container, {
                 scale: 3, // High DPI
-                backgroundColor: '#050b0e', // Dark theme matching app
+                backgroundColor: '#ffffff', // White theme
                 useCORS: true,
                 logging: false
             });
