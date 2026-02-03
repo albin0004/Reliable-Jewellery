@@ -213,45 +213,75 @@
                         </label>
                     </div>
 
-                    <table class="pricing-table">
-                        <thead>
-                            <tr>
-                                <th>Margin</th>
-                                <th>Final Price (AED)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="data-row">
-                                <td>15%</td>
-                                <td id="price-15">0.00</td>
-                            </tr>
-                            <tr class="data-row">
-                                <td>20%</td>
-                                <td id="price-20">0.00</td>
-                            </tr>
-                            <tr class="data-row">
-                                <td>25%</td>
-                                <td id="price-25">0.00</td>
-                            </tr>
-                            <tr class="data-row">
-                                <td>30%</td>
-                                <td id="price-30">0.00</td>
-                            </tr>
-                            <tr class="data-row">
-                                <td>35%</td>
-                                <td id="price-35">0.00</td>
-                            </tr>
-                            <tr class="data-row">
-                                <td>
-                                    <div class="custom-input-group">
-                                        <input type="number" id="custom-margin-input" placeholder="0" min="0" max="99">
-                                        %
-                                    </div>
-                                </td>
-                                <td id="price-custom">0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div id="pricing-content">
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Margin</th>
+                                    <th>Final Price (AED)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="data-row">
+                                    <td>15%</td>
+                                    <td id="price-15">0.00</td>
+                                </tr>
+                                <tr class="data-row">
+                                    <td>20%</td>
+                                    <td id="price-20">0.00</td>
+                                </tr>
+                                <tr class="data-row">
+                                    <td>25%</td>
+                                    <td id="price-25">0.00</td>
+                                </tr>
+                                <tr class="data-row">
+                                    <td>30%</td>
+                                    <td id="price-30">0.00</td>
+                                </tr>
+                                <tr class="data-row">
+                                    <td>35%</td>
+                                    <td id="price-35">0.00</td>
+                                </tr>
+                                <tr class="data-row">
+                                    <td>
+                                        <div class="custom-input-group">
+                                            <input type="number" id="custom-margin-input" placeholder="0" min="0"
+                                                max="99">
+                                            %
+                                        </div>
+                                    </td>
+                                    <td id="price-custom">0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section: Selling Price Profit Margin -->
+                <section class="card section-selling-price">
+                    <div class="card-header" style="justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="icon-box"><i class="fa-solid fa-tags"></i></div>
+                            <h2>Selling Price Profit Margin</h2>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="selling-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div id="selling-content" class="hidden">
+                        <div style="margin-bottom: 25px;">
+                            <label class="input-label">Selling Price (AED)</label>
+                            <input type="number" id="selling-price-input" class="t-input" placeholder="0.00">
+                        </div>
+
+                        <div class="result-display-box">
+                            <div class="label">Calculated Profit Margin</div>
+                            <div class="value" id="selling-margin-result">0.00%</div>
+                            <div class="sub-label">Based on Total Cost</div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Section 4: Media Upload -->

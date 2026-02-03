@@ -45,11 +45,13 @@ body {
 .bg-orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(60px);
+    /* Reduced for performance */
     z-index: -1;
     opacity: 0.4;
     animation: float 20s infinite ease-in-out;
     pointer-events: none;
+    will-change: transform;
 }
 
 .orb-1 {
@@ -86,7 +88,7 @@ body {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 15px;
     position: relative;
     z-index: 1;
 }
@@ -94,7 +96,7 @@ body {
 /* Header */
 .app-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* Share Container (Hidden off-screen usually, but styled for capture) */
@@ -220,7 +222,7 @@ body {
 
 .app-header h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-size: 2rem;
     background: var(--gradient-gold);
     -webkit-background-clip: text;
     background-clip: text;
@@ -247,7 +249,7 @@ body {
 .main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    gap: 15px;
 }
 
 @media (max-width: 900px) {
@@ -262,8 +264,8 @@ body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: var(--border-glass);
-    border-radius: 24px;
-    padding: 30px;
+    border-radius: 20px;
+    padding: 20px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
@@ -276,8 +278,8 @@ body {
 .card-header {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .icon-box {
@@ -381,8 +383,8 @@ h3 {
 /* Section 1: Rate Converter */
 .section-converter .converter-inputs {
     display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
 .input-label {
@@ -400,9 +402,9 @@ h3 {
     background: var(--input-bg);
     border: 1px solid var(--card-border);
     color: white;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 1.1rem;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 1rem;
     font-family: inherit;
     font-weight: 600;
     outline: none;
@@ -418,8 +420,8 @@ h3 {
 .result-display-box {
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
     border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 20px;
-    padding: 30px;
+    border-radius: 16px;
+    padding: 15px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -434,7 +436,7 @@ h3 {
 }
 
 .result-display-box .value {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
     background: var(--gradient-gold);
     -webkit-background-clip: text;
@@ -484,7 +486,7 @@ h3 {
 .cost-table td {
     background: var(--input-bg);
     /* Rows look like cards */
-    padding: 15px;
+    padding: 8px 12px;
     color: white;
     font-weight: 500;
 }
@@ -523,9 +525,9 @@ h3 {
 tr.total-row td {
     background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
     color: var(--gold-primary);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    padding: 20px;
+    padding: 15px;
     font-family: 'Playfair Display', serif;
     border-radius: 12px;
 }
@@ -553,8 +555,8 @@ tr.total-row td {
 
 .pricing-table tr.data-row td {
     background: var(--input-bg);
-    padding: 18px 25px;
-    font-size: 1.2rem;
+    padding: 12px 20px;
+    font-size: 1.1rem;
     font-weight: 700;
     border: 1px solid var(--card-border);
 }

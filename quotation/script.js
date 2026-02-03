@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Pricing
         marginPercent: 0,
-        finalPrice: 0
+        finalPrice: 0,
+        sellingPrice: 0,
+        sellingMargin: 0
     };
 
     // --- Elements ---
@@ -38,6 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const dirhamRateInput = document.getElementById('dirham-rate'); // Hidden
     // const liveStatusDot = document.getElementById('live-dot'); // Removed live logic for strict verification
     // const rateStatusText = document.getElementById('rate-status');
+
+    // --- Helper: Debounce ---
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
 
     // Section 2
     const goldWeightInput = document.getElementById('gold-weight');
@@ -64,7 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const customMarginInput = document.getElementById('custom-margin-input');
     const profitToggle = document.getElementById('profit-toggle');
-    const pricingTable = document.querySelector('.pricing-table');
+    const pricingContent = document.getElementById('pricing-content');
+
+    // Section Selling Price
+    const sellingToggle = document.getElementById('selling-toggle');
+    const sellingContent = document.getElementById('selling-content');
+    const sellingPriceInput = document.getElementById('selling-price-input');
+    const sellingMarginResult = document.getElementById('selling-margin-result');
 
     // Section 4
     const dropZone = document.getElementById('drop-zone');
@@ -123,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         calcRate();
         calcCosts();
         calcProfit();
+        calcSellingMargin();
     }
 
     // New functions for modular calculation
@@ -167,6 +186,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function calcSellingMargin() {
+        state.sellingPrice = parseFloat(sellingPriceInput.value) || 0;
+        if (state.sellingPrice > 0 && state.totalCost > 0) {
+            // Formula: ((Selling Price - Total Cost) / Selling Price) * 100
+            state.sellingMargin = ((state.sellingPrice - state.totalCost) / state.sellingPrice) * 100;
+            sellingMarginResult.textContent = state.sellingMargin.toFixed(2) + '%';
+        } else {
+            sellingMarginResult.textContent = "0.00%";
+        }
+    }
+
     function updatePriceRow(element, margin) {
         let final = 0;
         if (state.totalCost > 0) {
@@ -179,11 +209,13 @@ document.addEventListener('DOMContentLoaded', () => {
         element.textContent = final.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    const debouncedCalculateAll = debounce(calculateAll, 30);
+
     // --- Event Listeners ---
 
-    // Inputs (Added diamondWeightInput)
-    [usdInput, purityInput, goldWeightInput, diamondWeightInput, diamondCostInput, stoneCostInput, otherCostInput, makingCostInput, customMarginInput].forEach(input => {
-        input.addEventListener('input', calculateAll);
+    // Inputs (Added diamondWeightInput, sellingPriceInput)
+    [usdInput, purityInput, goldWeightInput, diamondWeightInput, diamondCostInput, stoneCostInput, otherCostInput, makingCostInput, customMarginInput, sellingPriceInput].forEach(input => {
+        input.addEventListener('input', debouncedCalculateAll);
     });
 
     // Diamond Input Specific Logic (Auto append ' ct')
@@ -249,13 +281,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Toggle Profit Logic
-    if (profitToggle) {
+    // Toggle Logic (Mutually Exclusive)
+    if (profitToggle && sellingToggle) {
+        // Init state logic based on checked status
+        // (Assuming profitToggle is checked by default in HTML)
+
         profitToggle.addEventListener('change', () => {
             if (profitToggle.checked) {
-                pricingTable.classList.remove('hidden');
+                sellingToggle.checked = false;
+                pricingContent.classList.remove('hidden');
+                sellingContent.classList.add('hidden');
             } else {
-                pricingTable.classList.add('hidden');
+                pricingContent.classList.add('hidden');
+            }
+        });
+
+        sellingToggle.addEventListener('change', () => {
+            if (sellingToggle.checked) {
+                profitToggle.checked = false;
+                sellingContent.classList.remove('hidden');
+                pricingContent.classList.add('hidden');
+            } else {
+                sellingContent.classList.add('hidden');
             }
         });
     }
@@ -455,39 +502,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('ex-total-cost').textContent = totalCostDisplay.textContent;
 
-            // 4. Populate Profit Table
+            // 4. Populate Profit Table (Dynamic)
             const profitBody = document.getElementById('ex-profit-body');
             profitBody.innerHTML = '';
 
-            const createProfitRow = (margin, priceElId) => {
-                const tr = document.createElement('tr');
-                const pEl = document.getElementById(priceElId);
-                const price = pEl ? pEl.textContent : "0.00";
-                tr.innerHTML = `<td style="text-align: center;">${margin}%</td><td style="text-align: right;">${price}</td>`;
-                profitBody.appendChild(tr);
-            };
-
-            createProfitRow(15, 'price-15');
-            createProfitRow(20, 'price-20');
-            createProfitRow(25, 'price-25');
-            createProfitRow(30, 'price-30');
-            createProfitRow(35, 'price-35');
-
-            if (customMarginInput.value) {
-                const tr = document.createElement('tr');
-                const price = document.getElementById('price-custom').textContent;
-                tr.innerHTML = `<td style="text-align: center;">${customMarginInput.value}%</td><td style="text-align: right;">${price}</td>`;
-                profitBody.appendChild(tr);
-            }
-
-
-
-            // Toggle Export Visibility
             const exMarginCol = document.querySelector('.classic-margin-col');
-            if (profitToggle && !profitToggle.checked) {
-                exMarginCol.style.display = 'none';
+            exMarginCol.style.display = 'block'; // Reset
+
+            const profitHeaders = document.querySelectorAll('.margin-table-compact thead th');
+            const costTableEl = document.querySelector('.cost-table-compact');
+            const splitRow = document.querySelector('.classic-split-row');
+
+            if (profitToggle.checked) {
+                // Restore Default Layout
+                profitHeaders[0].textContent = "Margin %";
+                profitHeaders[0].style.textAlign = "center";
+                profitHeaders[1].textContent = "Final Price";
+                profitHeaders[1].style.textAlign = "center";
+
+                costTableEl.style.marginBottom = "20px";
+                if (splitRow) splitRow.style.alignItems = "center"; // Default
+
+                const createProfitRow = (margin, priceElId) => {
+                    const tr = document.createElement('tr');
+                    const pEl = document.getElementById(priceElId);
+                    const price = pEl ? pEl.textContent : "0.00";
+                    tr.innerHTML = `<td style="text-align: center;">${margin}%</td><td style="text-align: center;">${price}</td>`;
+                    profitBody.appendChild(tr);
+                };
+
+                createProfitRow(15, 'price-15');
+                createProfitRow(20, 'price-20');
+                createProfitRow(25, 'price-25');
+                createProfitRow(30, 'price-30');
+                createProfitRow(35, 'price-35');
+
+                if (customMarginInput.value) {
+                    const tr = document.createElement('tr');
+                    const price = document.getElementById('price-custom').textContent;
+                    tr.innerHTML = `<td style="text-align: center;">${customMarginInput.value}%</td><td style="text-align: center;">${price}</td>`;
+                    profitBody.appendChild(tr);
+                }
+            } else if (sellingToggle && sellingToggle.checked) {
+                // Selling Price Mode Export
+                // Layout: Swap Columns - [Selling Price] [Margin %]
+                profitHeaders[0].textContent = "Selling Price";
+                profitHeaders[0].style.textAlign = "center"; // Align with 'Item' (center)
+                profitHeaders[1].textContent = "Margin %";
+                profitHeaders[1].style.textAlign = "center";
+
+                // Slight Gap
+                costTableEl.style.marginBottom = "15px";
+                if (splitRow) splitRow.style.alignItems = "flex-start"; // Align top to touch table
+
+                const marginVal = sellingMarginResult.textContent;
+                const sellPriceVal = sellingPriceInput.value ? parseFloat(sellingPriceInput.value).toFixed(2) : "0.00";
+
+                const tr = document.createElement('tr');
+                // Col 1: Selling Price (Center), Col 2: Margin (Center/Gold)
+                tr.innerHTML = `<td style="text-align: center; font-size:1.2rem; font-weight:bold;">${sellPriceVal}</td><td style="text-align: center; font-size:1.2rem; font-weight:bold; color:#d4af37;">${marginVal}</td>`;
+                profitBody.appendChild(tr);
             } else {
-                exMarginCol.style.display = 'block';
+                // Both Off
+                exMarginCol.style.display = 'none';
             }
 
             // 5. Image & Reference & Customer
@@ -619,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Input Logic
             tr.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', calculateAll);
+                input.addEventListener('input', debouncedCalculateAll);
             });
 
             addItemRow.parentNode.insertBefore(tr, addItemRow);
