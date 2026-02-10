@@ -273,6 +273,39 @@ tr:last-child td {
     --font-family: 'Outfit', sans-serif;
 }
 
+/* Hide Spin Buttons */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Back Button */
+.back-home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 100;
+}
+
+.back-home-btn:hover {
+    color: var(--accent-gold);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -305,9 +338,11 @@ body {
 .globule {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(60px);
+    /* Reduced for performance */
     opacity: 0.4;
     animation: float 20s infinite ease-in-out;
+    will-change: transform;
 }
 
 .globule-1 {

@@ -514,4 +514,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Enter Key Navigation ---
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const activeEl = document.activeElement;
+            if (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') {
+                e.preventDefault();
+
+                const allInputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([disabled]):not([readonly]), textarea:not([disabled]):not([readonly])'));
+
+                // Visibility check is crucial here due to Tabs
+                const visibleInputs = allInputs.filter(el => el.offsetParent !== null);
+
+                const currentIndex = visibleInputs.indexOf(activeEl);
+
+                if (currentIndex > -1 && currentIndex < visibleInputs.length - 1) {
+                    const nextInput = visibleInputs[currentIndex + 1];
+                    nextInput.focus();
+                    if (nextInput.select) nextInput.select();
+                }
+            }
+        }
+    });
+
 });

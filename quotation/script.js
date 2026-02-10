@@ -703,6 +703,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Enter Key Navigation ---
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const activeEl = document.activeElement;
+            // Only handle Inputs and Textareas
+            if (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') {
+                e.preventDefault(); // Prevent form submission or default behavior
+
+                // Get all valid inputs
+                const allInputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([disabled]):not([readonly]), textarea:not([disabled]):not([readonly])'));
+                
+                // Filter for strictly visible inputs (handles hidden sections/tabs)
+                const visibleInputs = allInputs.filter(el => el.offsetParent !== null);
+
+                // Find current index
+                const currentIndex = visibleInputs.indexOf(activeEl);
+
+                // Move to next
+                if (currentIndex > -1 && currentIndex < visibleInputs.length - 1) {
+                    const nextInput = visibleInputs[currentIndex + 1];
+                    nextInput.focus();
+                    if (nextInput.tagName === 'INPUT') {
+                        nextInput.select(); // Auto-select text for easy overwrite
+                    }
+                }
+            }
+        }
+    });
+
     // Initial Calc
     calculateAll();
 });

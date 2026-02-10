@@ -97,8 +97,11 @@ body {
 .bg-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(60px);
+    /* Reduced from 80px for performance */
     opacity: 0.3;
+    will-change: transform;
+    /* Hint to browser for optimization */
 }
 
 .orb-1 {

@@ -694,6 +694,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Enter Key Navigation ---
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const activeEl = document.activeElement;
+            // Only handle Inputs and Textareas
+            if (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') {
+                e.preventDefault();
+
+                // Get all valid inputs (excluding file inputs if necessary, though mainly text/number)
+                const allInputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([disabled]):not([readonly]), textarea:not([disabled]):not([readonly])'));
+
+                // Filter for visible
+                const visibleInputs = allInputs.filter(el => el.offsetParent !== null);
+
+                const currentIndex = visibleInputs.indexOf(activeEl);
+
+                if (currentIndex > -1 && currentIndex < visibleInputs.length - 1) {
+                    const nextInput = visibleInputs[currentIndex + 1];
+                    nextInput.focus();
+                    // Optional: Select text
+                    if (nextInput.select) nextInput.select();
+                }
+            }
+        }
+    });
+
     // Initial Run
     calculateHeader();
     renderTable();

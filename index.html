@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="landing.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#D4AF37">
+    <meta name="description"
+        content="Reliable Jewellery Professional Suite: Accurate quotation calculations, diamond weight conversion, and rate convention tools for jewellery professionals.">
 </head>
 
 <body>
@@ -88,6 +90,19 @@
         &copy; 2026 Reliable Jewellery. Crafted for Excellence.
     </footer>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 
 </html>

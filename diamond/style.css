@@ -12,6 +12,39 @@
     --font-main: 'Outfit', sans-serif;
 }
 
+/* Hide Spin Buttons */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Back Button */
+.back-home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 100;
+}
+
+.back-home-btn:hover {
+    color: var(--accent-color);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
