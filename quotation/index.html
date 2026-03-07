@@ -53,6 +53,10 @@
                             <input type="number" id="usd-input" class="t-input" placeholder="0.00" step="0.01">
                         </div>
                         <div style="flex:1;">
+                            <label class="input-label" style="color: #ef4444; font-weight: bold;">Dirham Rate</label>
+                            <input type="number" id="dirham-rate" class="t-input" value="3.67" step="0.0001" style="color: #ef4444; font-weight: bold; border-color: #ef4444;">
+                        </div>
+                        <div style="flex:1;">
                             <label class="input-label">Purity</label>
                             <input type="number" id="purity-input" class="t-input" placeholder="" step="0.001">
                         </div>
@@ -60,7 +64,6 @@
 
                     <!-- Hidden Inputs -->
                     <input type="hidden" id="oms-rate" value="31.1">
-                    <input type="hidden" id="dirham-rate" value="3.67">
 
                     <!-- Output -->
                     <div class="result-display-box">
@@ -68,7 +71,7 @@
                         <div class="value" id="base-rate-result">0.0000</div>
                         <div class="sub-label"></div>
                     </div>
-                    <div class="formula-text">(USD ÷ 31.1) × 3.67 × Purity</div>
+                    <div class="formula-text">(USD ÷ 31.1) × <span id="formula-dirham-rate">3.67</span> × Purity</div>
                 </section>
 
                 <!-- Section 2: Cost Analysis Table -->

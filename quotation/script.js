@@ -37,7 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const purityInput = document.getElementById('purity-input');
     const baseRateDisplay = document.getElementById('base-rate-result');
     const omsRateInput = document.getElementById('oms-rate'); // Hidden
-    const dirhamRateInput = document.getElementById('dirham-rate'); // Hidden
+    const dirhamRateInput = document.getElementById('dirham-rate');
+    const formulaDirhamRate = document.getElementById('formula-dirham-rate');
+
+    const savedDirhamRate = localStorage.getItem('quotation_dirham_rate');
+    if (savedDirhamRate) {
+        dirhamRateInput.value = savedDirhamRate;
+        if (formulaDirhamRate) formulaDirhamRate.textContent = savedDirhamRate;
+    }
     // const liveStatusDot = document.getElementById('live-dot'); // Removed live logic for strict verification
     // const rateStatusText = document.getElementById('rate-status');
 
@@ -107,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
         state.purity = parseFloat(purityInput.value) || 0;
         state.omsRate = parseFloat(omsRateInput.value) || 31.1;
         state.dirhamRate = parseFloat(dirhamRateInput.value) || 3.67;
+        
+        localStorage.setItem('quotation_dirham_rate', state.dirhamRate);
+        if (formulaDirhamRate) formulaDirhamRate.textContent = state.dirhamRate;
 
         // Formula: Result = (USD / Ounce Rate) * Dirham * Purity
         // Requirement: Absolutely no rounding during calculation, show exactly 4 decimals.
@@ -213,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    // Inputs (Added diamondWeightInput, sellingPriceInput)
-    [usdInput, purityInput, goldWeightInput, diamondWeightInput, diamondCostInput, stoneCostInput, otherCostInput, makingCostInput, customMarginInput, sellingPriceInput].forEach(input => {
+    // Inputs (Added diamondWeightInput, sellingPriceInput, dirhamRateInput)
+    [usdInput, purityInput, dirhamRateInput, goldWeightInput, diamondWeightInput, diamondCostInput, stoneCostInput, otherCostInput, makingCostInput, customMarginInput, sellingPriceInput].forEach(input => {
         input.addEventListener('input', debouncedCalculateAll);
     });
 
