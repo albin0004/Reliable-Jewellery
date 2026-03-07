@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reliable-jewellery-v1';
+const CACHE_NAME = 'reliable-jewellery-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -15,6 +15,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => cache.addAll(ASSETS))
@@ -23,30 +24,26 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then((response) => {
-                // Cache hit - return response
-                if (response) {
+                // Check if we received a valid response
+                if (!response || response.status !== 200 || response.type !== 'basic' || !event.request.url.startsWith('http')) {
                     return response;
                 }
-                return fetch(event.request).then(
-                    (response) => {
-                        // Check if we received a valid response
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
 
-                        // Clone the response
-                        const responseToCache = response.clone();
+                // Clone the response
+                const responseToCache = response.clone();
 
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
 
-                        return response;
-                    }
-                );
+                return response;
+            })
+            .catch(() => {
+                // Network failed, try to serve from cache
+                return caches.match(event.request);
             })
     );
 });
@@ -62,6 +59,6 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim())
     );
 });
