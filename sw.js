@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reliable-jewellery-v2';
+const CACHE_NAME = 'reliable-jewellery-v3';
 const ASSETS = [
     './',
     './index.html',
@@ -22,9 +22,27 @@ self.addEventListener('install', (event) => {
     );
 });
 
+self.addEventListener('activate', (event) => {
+    const cacheWhitelist = [CACHE_NAME];
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
+});
+
 self.addEventListener('fetch', (event) => {
+    // Only apply network-first with no-cache for GET requests
+    if (event.request.method !== 'GET') return;
+
     event.respondWith(
-        fetch(event.request)
+        fetch(event.request, { cache: 'no-cache' })
             .then((response) => {
                 // Check if we received a valid response
                 if (!response || response.status !== 200 || response.type !== 'basic' || !event.request.url.startsWith('http')) {
@@ -45,20 +63,5 @@ self.addEventListener('fetch', (event) => {
                 // Network failed, try to serve from cache
                 return caches.match(event.request);
             })
-    );
-});
-
-self.addEventListener('activate', (event) => {
-    const cacheWhitelist = [CACHE_NAME];
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => self.clients.claim())
     );
 });
